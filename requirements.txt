@@ -1,0 +1,2 @@
+# Entrada del buildpack Python: sólo dependencias del backend web.
+-r NewtonLab/backend/requirements.txt

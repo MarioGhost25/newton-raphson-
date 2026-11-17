@@ -1,0 +1,2 @@
+# Scripts montados en el contenedor Linux, también desde Windows.
+*.sh text eol=lf

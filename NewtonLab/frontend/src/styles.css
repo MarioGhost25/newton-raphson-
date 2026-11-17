@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --background: #090A0C; --panel: #141518; --control: #222428;
+  --border: #303238; --foreground: #EEEEF0; --muted-foreground: #9699A1;
+  --primary: #DCDDE0; --primary-foreground: #090A0C;
+  --secondary: #222428; --secondary-foreground: #EEEEF0;
+  --accent: #222428; --accent-foreground: #EEEEF0; --muted: #222428;
+  --input: #303238; --ring: #DCDDE0;
+  --destructive: #DCDDE0; --destructive-foreground: #090A0C;
+  --graph-function: #74A9FF; --graph-tangent: #EEA66D; --graph-iteration: #B19AF7;
+  --graph-reference: #E78DA6; --graph-root: #8FC5A6;
+  font-family: Inter, "Segoe UI", sans-serif;
+  font-synthesis: none;
+}
+@theme inline {
+  --color-background: var(--background); --color-foreground: var(--foreground);
+  --color-panel: var(--panel); --color-control: var(--control);
+  --color-border: var(--border); --color-input: var(--input); --color-ring: var(--ring);
+  --color-primary: var(--primary); --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary); --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent); --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted); --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive); --color-destructive-foreground: var(--destructive-foreground);
+}
+@layer base {
+  * { @apply border-border; }
+  body { @apply m-0 bg-background text-foreground antialiased; }
+  button:not(:disabled) { cursor: pointer; }
+  input[aria-invalid="true"] { @apply ring-1 ring-foreground; }
+  code { @apply break-words font-mono text-foreground; }
+}
+@layer components { .panel { @apply rounded-md border bg-panel; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}

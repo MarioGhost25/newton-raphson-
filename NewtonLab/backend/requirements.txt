@@ -1,0 +1,10 @@
+fastapi>=0.115,<1
+pydantic>=2.10,<3
+uvicorn>=0.34,<1
+sympy>=1.12,<2
+numpy>=1.26,<3
+SQLAlchemy>=2,<3
+psycopg[binary]>=3.2,<4
+matplotlib>=3.8,<4
+reportlab>=4,<6
+python-dotenv>=1,<2
