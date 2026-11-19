@@ -73,3 +73,24 @@ def test_exact_initial_root_with_zero_derivative():
 def test_invalid_parameters(kwargs):
     with pytest.raises(ValueError):
         solve("x**2 - 2", **kwargs)
+
+
+@pytest.mark.parametrize("natural, explicit", [
+    ("x² - 0.5", "x**2 - 0.5"),
+    ("x^3 - x - 2", "x**3 - x - 2"),
+    ("2x³ + 6x² - 8x + 2", "2*x**3 + 6*x**2 - 8*x + 2"),
+    ("1e-3x² − .5x", "1e-3*x**2 - .5*x"),
+    ("x¹⁰", "x**10"),
+])
+def test_natural_notation_preserves_calculations(natural, explicit):
+    assert parse_expression(natural) == parse_expression(explicit)
+    actual, expected = solve(natural), solve(explicit)
+    assert actual == expected
+    for step in actual.iterations:
+        assert step.absolute_error == abs(step.next_x - step.x)
+
+
+@pytest.mark.parametrize("source", ["2x.__class__", "x²; print(1)", "x^__import__('os')", "x//2", "x%2", "lambda x: x", "2 3", "sin x", "x² # comment"])
+def test_natural_notation_rejects_python(source):
+    with pytest.raises(ExpressionError):
+        parse_expression(source)

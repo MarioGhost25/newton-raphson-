@@ -13,11 +13,11 @@ export default function App() {
   return <div className="mx-auto max-w-[1600px] px-4 sm:px-7">
     <a href="#calculator" className="sr-only focus:not-sr-only focus:block focus:p-3">Ir al cálculo</a>
     <header className="flex flex-wrap items-center justify-between gap-3 border-b py-5">
-      <div className="flex items-center gap-3"><Activity size={22} aria-hidden="true" /><span className="text-xl font-semibold tracking-tight">NewtonLab</span><span className="border-l pl-3 text-xs text-muted-foreground">WEB / 03</span></div>
+      <div className="flex items-center gap-3"><Activity size={22} aria-hidden="true" /><div><h1 className="text-xl font-semibold tracking-tight">NewtonLab</h1><p className="text-xs text-muted-foreground">Newton-Raphson · Métodos numéricos</p></div></div>
       <div className="flex flex-wrap items-center gap-2"><ExerciseLibrary onLoad={calculation.load} /><HistoryAccess onRestore={data => calculation.load(data.result.parameters, data.result, data.entry.id)} /><ConnectionStatus /></div>
     </header>
     <main id="calculator" className="pb-8">
-      <div className="py-7"><p className="mb-2 text-xs tracking-[.16em] text-muted-foreground">MÉTODOS NUMÉRICOS</p><h1 className="text-2xl font-medium tracking-tight">Newton-Raphson</h1><p className="mt-2 text-sm text-muted-foreground">De una aproximación inicial a una raíz, paso a paso.</p></div>
+      <div className="py-7"><p className="mt-2 text-sm text-muted-foreground">De una aproximación inicial a una raíz, paso a paso.</p></div>
       <div className="grid items-start gap-5 lg:grid-cols-[300px_minmax(0,1fr)]">
         <CalculationForm fields={calculation.fields} errors={calculation.errors} pending={calculation.pending} onChange={calculation.change} onSubmit={calculation.submit} onReset={calculation.reset} onCancel={calculation.cancel} />
         <div className="min-w-0 space-y-5" aria-busy={calculation.pending}>

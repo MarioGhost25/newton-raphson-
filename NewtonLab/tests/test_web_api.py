@@ -105,3 +105,13 @@ def test_capacity_and_internal_failure(monkeypatch):
     response = post()
     assert response.status_code == 500
     assert "private" not in response.text
+
+
+@pytest.mark.parametrize("expression", ["x² - 0.5", "x^3 - x - 2", "2x³ + 6x² - 8x + 2"])
+def test_natural_expression_api(expression):
+    response = post(expression=expression)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["converged"]
+    for step in data["iterations"]:
+        assert step["absolute_error"] == abs(step["next_x"] - step["x"])

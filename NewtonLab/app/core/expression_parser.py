@@ -1,5 +1,6 @@
 """Gramática AST cerrada: nunca se ejecuta el texto introducido."""
 import ast
+import re
 from dataclasses import dataclass
 import sympy as sp
 
@@ -20,13 +21,40 @@ class ParsedExpression:
     derivative: sp.Expr
 
 
+def normalize_expression(source: str) -> str:
+    """Normaliza notación matemática; el AST cerrado sigue siendo la autoridad."""
+    if not isinstance(source, str) or not source.strip() or len(source) > 512:
+        raise ExpressionError("Introducí una función de hasta 512 caracteres.")
+    source = re.sub(r"[⁰¹²³⁴⁵⁶⁷⁸⁹]+", lambda m: "**" + m[0].translate(
+        str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹", "0123456789")), source).replace("^", "**").replace("−", "-")
+    tokens = []
+    position = 0
+    pattern = re.compile(r"\s+|(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?|[A-Za-z_][A-Za-z_0-9]*|\*\*|[+*/()-]")
+    for match in pattern.finditer(source):
+        if match.start() != position:
+            raise ExpressionError("Símbolo no permitido en la función.")
+        position = match.end()
+        token = match[0]
+        if token.isspace():
+            continue
+        if token[0].isalpha() or token[0] == "_":
+            if token not in CONSTANTS and token not in FUNCTIONS:
+                raise ExpressionError("Nombre no permitido en la función.")
+        if token == "x" and tokens and re.fullmatch(r"(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?", tokens[-1]):
+            tokens.append("*")
+        tokens.append(token)
+    if position != len(source):
+        raise ExpressionError("Símbolo no permitido en la función.")
+    return " ".join(tokens)
+
+
 def parse_expression(source: str) -> ParsedExpression:
     if not isinstance(source, str) or not source.strip():
         raise ExpressionError("Introducí una función de x.")
     if len(source) > 512:
         raise ExpressionError("La función admite hasta 512 caracteres.")
     try:
-        tree = ast.parse(source.strip(), mode="eval")
+        tree = ast.parse(normalize_expression(source), mode="eval")
     except (SyntaxError, ValueError, RecursionError) as exc:
         raise ExpressionError("Expresión inválida. Usá * para multiplicar y ** para potencias.") from exc
     if sum(1 for _ in ast.walk(tree)) > 128:

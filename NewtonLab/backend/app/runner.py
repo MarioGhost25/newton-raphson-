@@ -30,7 +30,8 @@ def run_worker(request: CalculationRequest, mode: str = "calculate") -> dict[str
             if directory is not None:
                 command.append(directory)
             completed = subprocess.run(
-                command, input=request.model_dump_json(), capture_output=True, text=True,
+                # ASCII JSON preserva exponentes Unicode también en stdin de Windows.
+                command, input=json.dumps(request.model_dump(mode="json"), ensure_ascii=True), capture_output=True, text=True,
                 encoding="utf-8", cwd=Path(__file__).resolve().parents[2],
                 timeout=TIMEOUT_SECONDS,
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,

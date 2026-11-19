@@ -11,7 +11,7 @@ interface Props {
   onSubmit: () => Promise<void>; onReset: () => void; onCancel: () => void
 }
 const inputs = [
-  { key: 'expression', label: 'Función f(x)', hint: 'Usá * para multiplicar y ** para potencias.' },
+  { key: 'expression', label: 'Función f(x)', hint: 'Ejemplo: 2x³ + 6x² − 8x + 2. Potencias: ², ^ o **.' },
   { key: 'initial_guess', label: 'Valor inicial x₀', hint: 'Punto de partida del método.' },
   { key: 'tolerance', label: 'Tolerancia', hint: 'Error absoluto y residuo, entre 1e-14 y 1.' },
   { key: 'max_iterations', label: 'Máximo de iteraciones', hint: 'Entre 1 y 200 pasos.' },
@@ -33,9 +33,9 @@ export function CalculationForm({ fields, errors, pending, onChange, onSubmit, o
         <DialogContent className="max-h-[85dvh] overflow-y-auto">
           <DialogHeader><DialogTitle>Escribí una función de x</DialogTitle><DialogDescription>El cálculo y la derivada se realizan en el servidor, usando números reales.</DialogDescription></DialogHeader>
           <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
-            <p>Operadores: <code>+ − * / **</code>. Constantes: <code>pi, e, E</code>. Usá punto decimal y multiplicación explícita.</p>
+            <p>Operadores: <code>+ − * / ^ **</code> y exponentes como <code>², ³</code>. Constantes: <code>pi, e, E</code>. Usá punto decimal. Podés escribir <code>2x</code>; para otros productos usá <code>*</code>.</p>
             <p>Funciones: <code>sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, exp, log, sqrt, abs</code>. Todas reciben un argumento; los ángulos se expresan en radianes.</p>
-            <p>Ejemplos: <code>x**2 - 2</code>, <code>cos(x) - x</code>, <code>log(x) - 1</code>.</p>
+            <p>Ejemplos: <code>x² - 0.5</code>, <code>x^3 - x - 2</code>, <code>cos(x) - x</code>.</p>
             <p>Newton no garantiza convergencia. Una derivada casi nula o un punto fuera del dominio puede detener el cálculo.</p>
           </div>
         </DialogContent>
